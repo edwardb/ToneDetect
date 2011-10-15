@@ -1,25 +1,25 @@
 AlertTone,1000,-1,-1,-1,N/A
 Barnard FD EMS,881.0,977.2,-1,-1,N/A
 Barnard FD,378.6,399.8,-1,-1,N/A
-Brighton FD 1,746.8,707.3,-1,-1,emb@jetcom.org
-Brighton FD 2,746.8,669.9,-1,-1,emb@jetcom.org
-Brighton FD All-Call,600.9,600.9,-1,-1,emb@jetcom.org
+Brighton FD 1,746.8,707.3,-1,-1,emb@xxx.org
+Brighton FD 2,746.8,669.9,-1,-1,emb@xxx.org
+Brighton FD All-Call,600.9,600.9,-1,-1,emb@xxx.org
 Brighton FD EMS,746.8,600.9,-1,-1,N/A
 Brockport FD,1530.0,910.0,-1,-1,N/A
 Brockport,726.8,553.9,-1,-1,N/A
 Brockport EMS,1530.0,1743.0,-1,-1,N/A
 Brockport,1530.0,833.0,-1,-1,N/A
-Bushnells Basin FD,1130.0,1036.0,-1,-1,teb@jetcom.org
+Bushnells Basin FD,1130.0,1036.0,-1,-1,teb@xxx.org
 Car 820,584.8,339.6,-1,-1,N/A
 Cars 802 & 812,726.8,979.9,-1,-1,N/A
 Chili Ambulance,553.9,617.4,-1,-1,N/A
 Chili Ambulance 2,879.0,510.5,-1,-1,N/A
 Churchville FD Ambulance,2807.0,1180.0,-1,-1,N/A
-Churchville FD,2807.0,1180.0,2575.0,-1,emb@jetcom.org
-East Rochester FD 1,643.0,799.0,-1,-1,emb@jetcom.org;teb@jetcom.org
-East Rochester FD 2,399.8,339.6,-1,-1,emb@jetcom.org;teb@jetcom.org
-Egypt FD,688.3,726.8,-1,-1,teb@jetcom.org
-Fairport FD,422.1,832.5,-1,-1,emb@jetcom.org;teb@jetcom.org
+Churchville FD,2807.0,1180.0,2575.0,-1,emb@xxx.org
+East Rochester FD 1,643.0,799.0,-1,-1,emb@xxx.org;teb@xxx.org
+East Rochester FD 2,399.8,339.6,-1,-1,emb@xxx.org;teb@xxx.org
+Egypt FD,688.3,726.8,-1,-1,teb@xxx.org
+Fairport FD,422.1,832.5,-1,-1,emb@xxx.org;teb@xxx.org
 Fishers,834.0,799.0,-1,-1,N/A
 Fishers FD,834.0,1036.0,-1,-1,N/A
 Gates EMS,746.8,422.1,-1,-1,N/A
@@ -34,10 +34,10 @@ HazMat,832.5,339.6,-1,-1,N/A
 Hamlin,669.9,339.6,-1,-1,N/A
 Hamlin Ambulance,669.9,422.1,-1,-1,N/A
 Hamlin FD,669.9,378.6,-1,-1,N/A
-Henrietta FD,707.3,788.5,-1,-1,emb@jetcom.org
-Henrietta Statn 2,707.3,746.8,-1,-1,emb@jetcom.org
-Henrietta Statn 3,707.3,799.0,-1,-1,emb@jetcom.org
-Henrietta 652,716.7,794.3,-1,-1,emb@jetcom.org
+Henrietta FD,707.3,788.5,-1,-1,emb@xxx.org
+Henrietta Statn 2,707.3,746.8,-1,-1,emb@xxx.org
+Henrietta Statn 3,707.3,799.0,-1,-1,emb@xxx.org
+Henrietta 652,716.7,794.3,-1,-1,emb@xxx.org
 Hilton FD 1,2575.0,950.0,-1,-1,N/A
 Hilton FD 2,2575.0,1082.0,-1,-1,N/A
 Hilton FD 3,2575.0,1130.0,-1,-1,N/A
@@ -56,16 +56,16 @@ Lake Shore Fire,634.5,321.7,-1,-1,N/A
 North Greece FD fire,569.1,553.9,-1,-1,N/A
 North Greece FD officers,584.8,767.4,-1,-1,N/A
 Northeast Quadrant,321.7,569.1,-1,-1,N/A
-Penfield FD 1,707.3,879.0,-1,-1,emb@jetcom.org;teb@jetcom.org
-Penfield FD 2,707.3,634.5,-1,-1,emb@jetcom.org;teb@jetcom.org
-Pittsford FD 1,422.1,358.6,-1,-1,emb@jetcom.org;teb@jetcom.org
-Pittsford FD 2,422.1,339.6,-1,-1,emb@jetcom.org;teb@jetcom.org
+Penfield FD 1,707.3,879.0,-1,-1,emb@xxx.org;teb@xxx.org
+Penfield FD 2,707.3,634.5,-1,-1,emb@xxx.org;teb@xxx.org
+Pittsford FD 1,422.1,358.6,-1,-1,emb@xxx.org;teb@xxx.org
+Pittsford FD 2,422.1,339.6,-1,-1,emb@xxx.org;teb@xxx.org
 Point Pleasant Ambulance,707.3,349.0,-1,-1,N/A
 Point Pleasant FD,707.3,339.6,-1,-1,N/A
 Point Pleasant FD,707.3,691.8,-1,-1,N/A
 Ridge-Culver EMS,473.2,832.5,-1,-1,N/A
 Ridge-Culver FD,473.2,794.3,-1,-1,N/A
-Rope Rescue,832.5,422.1,-1,-1,emb@jetcom.org;teb@jetcom.org
+Rope Rescue,832.5,422.1,-1,-1,emb@xxx.org;teb@xxx.org
 Rush FD 1,524.6,584.8,-1,-1,N/A
 Rush FD 2,524.6,707.3,-1,-1,N/A
 Scottsville EMS?,445.7,767.4,-1,-1,N/A
@@ -82,10 +82,10 @@ Webster FD fire,1465.0,950.0,-1,-1,N/A
 Webster FD officers,1465.0,992.0,-1,-1,N/A
 West Brighton FD,832.5,746.8,-1,-1,N/A
 West Webster Ambulance,569.1,339.6,-1,-1,N/A
-West Webster FD group,569.1,569.1,-1,-1,emb@jetcom.org
-West Webster FD officers,569.1,378.6,-1,-1,emb@jetcom.org
-West Webster Fire,569.1,339.6,-1,-1,emb@jetcom.org
-West Webster ???,794.3,426.4,-1,-1,emb@jetcom.org
-West Webster FD All Call,569.1,569.1,-1,-1,emb@jetcom.org
+West Webster FD group,569.1,569.1,-1,-1,emb@xxx.org
+West Webster FD officers,569.1,378.6,-1,-1,emb@xxx.org
+West Webster Fire,569.1,339.6,-1,-1,emb@xxx.org
+West Webster ???,794.3,426.4,-1,-1,emb@xxx.org
+West Webster FD All Call,569.1,569.1,-1,-1,emb@xxx.org
 AlertTone,1004.5,-1,-1,-1,N/A
 AlertTone,1050.0,-1,-1,-1,N/A
