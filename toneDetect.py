@@ -1,4 +1,24 @@
 #!/usr/bin/env python
+
+"""
+ * Copyright (C)2011, Edward M. Brown <edwardb[at]gmail.com>
+ * 
+ ****** ****** ****** ****** ****** ****** ****** ****** ****** ******
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ****** ****** ****** ****** ****** ****** ****** ****** ****** ******
+"""
+
 """ Listens to audio and displays detected alerting tones
 """
 import pyaudio
@@ -33,15 +53,15 @@ from decimal import Decimal, getcontext
 MAJOR_VERSION = "0."
 MINOR_VERSION = "2."
 
-__author__ = "Travis Brown and Edward Brown"
-__copyright__ = "Copyright 2010, jetcom.org"
-__credits__ = ["Travis Brown, Edward Brown"]
-__license__ = "GPL"
+__author__ = "Edward Brown and Travis Brown"
+__copyright__ = "Copyright 2011, jetcom.org"
+__credits__ = ["Edward Brown, Travis Brown"]
+__license__ = "GPL V3"
 __version__ = "$Revision: 190 $"
 __maintainer__ = "Edward Brown"
 __email__ = "edwardb@gmail.com"
 __status__ = "alpha"
-__revdate__ = "$Date: 2011-05-22 22:37:02 -0400 (Sun, 22 May 2011) $"
+__revdate__ = "$Date: 2011-10-16 20:24:02 -0400 (Sun, 16 October 2011) $"
 __commitby__ = "$Author: emb $"
 
 
@@ -91,7 +111,7 @@ swidth = 2
 CHANNELS = 1
 reset = False
 validTonesFile="validTones.ini"
-ignoreTonesFile="ignoreTones.csv"
+ignoreTonesFile="ignoreTones.txt"
 window = np.blackman(bufferSize)
 toneDetected = False
 audio = Queue.Queue()
@@ -576,7 +596,7 @@ def mail( subject, mailList, text, attach):
     msg.attach(part)
     if sendMail == True:
         logger.debug("Begin SMTP connection")
-        server = smtplib.SMTP('smtp.rochester.rr.com')
+        server = smtplib.SMTP(smtp_server)
         server.debug = 1
         server.sendmail(emailFrom, mailList, msg.as_string())
         server.close()
@@ -594,11 +614,12 @@ def go():
 
 if __name__ == "__main__":
 
+    makeDirectory("out")
+    makeDirectory("log")
     logger.info("Version number: %s %s" % (MAJOR_VERSION + MINOR_VERSION+ __version__.rsplit(" ")[1], __status__))
     logger.info("Last commit: %s by %s" % (getRevInfo(__revdate__), getRevInfo(__commitby__)))
     logger.debug("Starting main")
     lastCheckTime = time.time()
-    makeDirectory("out")
     toneMapDict = makeToneMapDict()
     ignoreToneDict = makeIgnoreToneDict
 
