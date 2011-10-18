@@ -47,6 +47,7 @@ import threading
 import Queue
 import ConfigParser
 from decimal import Decimal, getcontext
+from threading import Event, Thread
 
 
 
@@ -100,7 +101,7 @@ SECTION = re.compile('^\s*\[\s*([^\]]*)\s*\]\s*$')
 PARAM   = re.compile('^[-+]?[0-9]+(\.[0-9]+)?$')
 COMMENT = re.compile('^\s*;.*$')
 toneMapDict = {}  # define toneMap dictionary
-ignoreToneDict = {}  # define ignoreTone dictionary
+ignoreTone = []  # define ignoreTone list
 p = pyaudio.PyAudio()
 #sampleRate = 11025
 bufferSize = 1024
@@ -111,7 +112,9 @@ swidth = 2
 CHANNELS = 1
 reset = False
 validTonesFile="validTones.ini"
-ignoreTonesFile="ignoreTones.txt"
+ignoreTonesFile="ignoreTones.ini"
+toneMapFile="toneMap.csv"
+
 window = np.blackman(bufferSize)
 toneDetected = False
 audio = Queue.Queue()
@@ -144,6 +147,27 @@ else:
     level = LEVELS.get(level_name, logging.NOTSET)
     logging.basicConfig(level=level)
     
+class RepeatTimer(Thread):
+    def __init__(self, interval, function, iterations=0, args=[], kwargs={}):
+        Thread.__init__(self)
+        self.interval = interval
+        self.function = function
+        self.iterations = iterations
+        self.args = args
+        self.kwargs = kwargs
+        self.finished = Event()
+ 
+    def run(self):
+        count = 0
+        while not self.finished.is_set() and (self.iterations <= 0 or count < self.iterations):
+            self.finished.wait(self.interval)
+            if not self.finished.is_set():
+                self.function(*self.args, **self.kwargs)
+                count += 1
+ 
+    def cancel(self):
+        self.finished.set()
+    
 def makeToneMapDict():
     ##   decided to switch to a csv tone information file. That way the tone map can
     ##   easily be created in Excel, Open Office or even a text editor. The layout of
@@ -157,28 +181,58 @@ def makeToneMapDict():
     ##   email address. Multiple addresses should be seperated by a semicolon ";"
     ##   toneman@acme.com;tonemanjunior@acme.com
 
-    toneMapDict = {}
-    reader = csv.reader(open("toneMap.csv", "r"))
+    x = {}
+    reader = csv.reader(open(toneMapFile, "r"))
     for row in reader:
-        toneMapDict.setdefault(row[1], {}).setdefault(row[2], {}).setdefault(row[3], {}).setdefault(row[4], {})['email']=row[5]
-        toneMapDict.setdefault(row[1], {}).setdefault(row[2], {}).setdefault(row[3], {}).setdefault(row[4], {})['dept']=row[0]
-    return toneMapDict
+        x.setdefault(row[1], {}).setdefault(row[2], {}).setdefault(row[3], {}).setdefault(row[4], {})['email']=row[5]
+        x.setdefault(row[1], {}).setdefault(row[2], {}).setdefault(row[3], {}).setdefault(row[4], {})['dept']=row[0]
+    return(x)
+
+def makeValidToneArray():
+    #Build a valid tones dictionary
+    # The dictionary name comes from the [SECTION] of the validTonesFile
+    x = []
+    f = open(validTonesFile)
+    for row in f:
+        x.append(row)
+    f.close()
+    f = open(ignoreTonesFile)
+    for row in f:
+        x.append(row)
+    f.close()
+    y = np.asanyarray(x)
+    return(y)
+
+def checkINI():
+    t = time.time()
+    x = os.stat(validTonesFile).st_mtime
+    y = os.stat(toneMapFile).st_mtime
+    z = os.stat(ignoreTonesFile).st_mtime
+    if t - x < 120:
+        makeValidToneArray()
+        print("ValidTones reloaded = ",t-x)
+    if t - y < 120:
+        makeToneMapDict()
+        print("ToneMap reloaded")
+    if t - z < 120:
+        makeIgnoreToneDict()
+        print("IgnoreTone reloaded")
+    return()
+
 
 def copyList(x):
     y = []
     y.extend(x)
-    return y
+    return(y)
  
-def makeIgnoreToneDict():
-    global loadedIgnoreTones
-    logger.debug("Starting make IgnoreTonesDict")
-    loadedIgnoreTones = os.stat(ignoreTonesFile).st_mtime
-    ignoreTonesDict = {}
-    reader = csv.reader(open(ignoreTonesFile,"r"))
-    for row in reader:
-        ignoreTonesDict.setdefault(row[0], {})
-    logger.debug("Leaving makeIgnoreTonesDict")
-    return ignoreTonesDict
+def makeIgnoreTone():
+    logger.debug("Starting load IgnoreTones")
+    x = []
+    f = open(ignoreTonesFile)
+    for row in f:
+        x.append(row)
+    logger.debug("Leaving makeIgnoreTones")
+    return(x)
 
 def calc(d, value):
     for k in d:
@@ -186,7 +240,7 @@ def calc(d, value):
             d[k].append(value)
             return d
     d[value] = [value]
-    return d
+    return(d)
 
 def getRevInfo(x):
     x = x.split(" ",1)
@@ -242,7 +296,7 @@ def fcmp(x1,x2):
         return True
     else:
         return False
-    
+
 def displaySoundDevices():
     print ("")
     print ("=================================")
@@ -341,7 +395,7 @@ def findNearest(array,value):
     return (array[idx].item())
 
 def checkTone(x):
-    x = findNearest(ValidTones, x)
+    x = findNearest(validToneArray, x)
     return(x)
 
 def getAlertInfo( timestamp, tones, toneCounttoneMapDict ):
@@ -391,7 +445,7 @@ def getAlertInfo( timestamp, tones, toneCounttoneMapDict ):
     If so set the dept to Single Tone Alert.
     """
 
-    if len(tabTones) == 1 and str(tabTones[0]) in ignoreToneDict():
+    if len(tabTones) == 1 and str(tabTones[0]) in ignoreTone:
         deptList.append('Single Tone Alert')
         toneList.append(tabTones[0])
         tabTones = tabTones[1:]
@@ -402,7 +456,7 @@ def getAlertInfo( timestamp, tones, toneCounttoneMapDict ):
     """
     logger.debug("Before removing ignoreTones: %s" % (tabTones))
     for tone in tabTones[:]:
-        if str(tone) in ignoreToneDict(): 
+        if str(tone) in ignoreTone: 
             tabTones.remove(tone)
     logger.debug("After removing ignoreTones: %s" % (tabTones))
     if len(tabTones) == 0:
@@ -621,8 +675,10 @@ if __name__ == "__main__":
     logger.debug("Starting main")
     lastCheckTime = time.time()
     toneMapDict = makeToneMapDict()
-    ignoreToneDict = makeIgnoreToneDict
-
+    ignoreTone = makeIgnoreTone()
+    validToneArray = makeValidToneArray()
+    t = RepeatTimer(60.0,checkINI)
+    t.start()
     #DO NOT MOVE THIS CODE
     #For the values contained in the ini file to be global, this code must be performed in the
     #mainstream of the program. This will change when we move to Python >= 3.0
@@ -698,27 +754,6 @@ if __name__ == "__main__":
     maxSilenceSamples = maxSilenceLength / sampleDuration
     maxRecordSamples = maxRecordLength/sampleDuration
     
-    """
-    Create lists of valid tones based on paging system type.
-    """
-    #Build a valid tones dictionary
-    # The dictionary name comes from the [SECTION] of the validTonesFile
-    f = open(validTonesFile)
-    for line in f:
-        # Skip line if a comment
-        if COMMENT.match(line): continue
-        m = SECTION.match(line) 
-        if m:
-            section, = m.groups()
-            locals()[section] = []
-            i = open(ignoreTonesFile)
-            for tone in i:
-                locals()[section].append(tone.strip())
-            i.close
-        m = PARAM.match(line)
-        if m:
-            locals()[section].append(line.strip())
-    f.close()
 
     ## If we get more than two frequencies in a row within N percent, we presume
     ## it to be a tone. We need at least .4 seconds total though to really
