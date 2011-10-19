@@ -230,7 +230,7 @@ def makeIgnoreTone():
     x = []
     f = open(ignoreTonesFile)
     for row in f:
-        x.append(row)
+        x.append(row.strip())
     logger.debug("Leaving makeIgnoreTones")
     return(x)
 
